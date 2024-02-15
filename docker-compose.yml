@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  python_app:
+    image: python:3.9
+    container_name: python_app
+    working_dir: /app
+    volumes:
+      - ./app:/app
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    tty: true
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    ports:
+      - "4040:4040"
+    env_file:
+      - .env
+    command: ["http", "python_app:3000"]
+    depends_on:
+      - python_app
+
+networks:
+  default:
+    name: docker_ngrok
