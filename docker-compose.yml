@@ -2,7 +2,9 @@ version: "3.9"
 
 services:
   python_app:
-    image: python:3.9
+    build:
+      context: ./docker/python
+      dockerfile: Dockerfile
     container_name: python_app
     working_dir: /app
     volumes:
@@ -12,12 +14,11 @@ services:
     env_file:
       - .env
     tty: true
-    build:
-      context: .
-      dockerfile: Dockerfile
 
   ngrok:
-    image: ngrok/ngrok:latest
+    build:
+      context: ./docker/ngrok
+      dockerfile: Dockerfile
     restart: unless-stopped
     ports:
       - "4040:4040"
